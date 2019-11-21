@@ -11,7 +11,7 @@ function App() {
   return (
     <>
        <div className="video-container">
-          <video muted src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
+          <video muted src={wallpaper} className="video-bg" alt="logo" onLoadedData={(this) => {console.log(this)}} loop={true} />
        </div>
       <Sidebar />
     </>
