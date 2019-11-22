@@ -10,7 +10,7 @@ import wallpaper from '../../materials/videos/main.mp4'
 import './app.scss';
 
 export default class App extends Component {
-
+  
     state = {
 
     }
