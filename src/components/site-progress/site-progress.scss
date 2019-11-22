@@ -1,0 +1,24 @@
+.site-progress {
+    position: absolute;
+    list-style: none;
+    top: 50%;
+    text-align: -webkit-right;
+    left: 98%;
+    padding: 0;
+}
+
+.bar {
+    width: 30px;
+    height: 3px;
+    background-color: azure;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.bar-top {
+    width: 45px;
+    height: 3px;
+    background-color: blue;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}

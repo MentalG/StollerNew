@@ -1,0 +1,16 @@
+.title {
+    position: fixed;
+    top: 40%;
+    left: 8%;
+
+    &-primary {
+        color: #D7FEEC;
+        font-size: 72px;
+        margin-bottom: 20px;
+    }
+
+    &-secondary {
+        color: white;
+        font-size: 24px
+    }
+}
