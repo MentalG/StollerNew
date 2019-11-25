@@ -2,10 +2,10 @@
     list-style: none;
     top: 43%;
     text-align: -webkit-right;
-    z-index: -1;
+    z-index: 0;
     left: 98%;
     padding: 0;
-    position: sticky;
+    position: fixed;
 }
 
 .bar {
@@ -24,6 +24,6 @@
     margin-bottom: 10px;
 }
 
-.on-page {
+li.on-page > div {
     background-color: #D7FEEC;
 }

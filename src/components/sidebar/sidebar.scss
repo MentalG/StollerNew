@@ -1,5 +1,5 @@
 @mixin sidebar {
-  position: fixed;
+  position: absolute;
   top: 0%;
   left: 0%;
   background-color: rgba(0, 0, 0, 0.5);
@@ -9,7 +9,7 @@
 }
 
 @mixin sidebar-container {
-    position: relative;
+    position: absolute;
     top: 50%;
     transition: all 0.5s ease-out;
 }
