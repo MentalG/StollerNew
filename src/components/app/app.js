@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 //components
 import Sidebar from '../sidebar/sidebar'
@@ -11,74 +11,110 @@ import poster from '../../materials/image/poster.png'
 import './app.scss';
 
 export default class App extends Component {
-  
-    state = {
-      pages: [],
-      curentPage: 0,
-      pageHeight: window.innerHeight
-    }
 
-    handleScroll = (e) => {
-      const delta = e.nativeEvent.wheelDelta
-      const prevElement = e.target.previousElementSibling
-      const nextElement = e.target.nextElementSibling
-      let curentPage
+  state = {
+    pages: {},
+    currentPage: 0,
+    pageHeight: window.innerHeight
+  }
 
-      if (delta < 0 && nextElement !== null) {
-        curentPage = nextElement.offsetTop
-        window.scrollTo({
-          top: curentPage,
-          behavior: "smooth"
-        })
-      }
+  handleScroll = (e) => {
+    const { currentPage, pageHeight } = this.state
+    const delta = e.nativeEvent.wheelDelta
+    let setCurentPage
 
-      if(delta > 0 && prevElement !== null) {
-        curentPage = prevElement.offsetTop
-        window.scrollTo({
-          top: curentPage,
-          behavior: "smooth"
-        })
-      }
-
-      this.setState(() => {
-        return {
-          curentPage: curentPage
-        }
+    
+    if (delta < 0) {
+      setCurentPage = pageHeight + currentPage
+      window.scrollTo({
+        top: setCurentPage,
+        behavior: "smooth"
       })
-      
     }
-
-    componentDidMount() {
-      const elements = document.getElementsByTagName('section')
-      const elementsArray = []
-
-      for (const value of elements) {
-        elementsArray.push(value.className)
-      }
-
-      this.setState(() => {
-        return {
-          pages : elementsArray
-        }
+    
+    if (delta > 0) {
+      setCurentPage = currentPage - pageHeight
+      window.scrollTo({
+        top: setCurentPage,
+        behavior: "smooth"
       })
-
     }
 
-    render() {
-      const { pages, curentPage, pageHeight } = this.state
-      
-      return (
-        <div className='app-container' onWheel={(e) => this.handleScroll(e)}>
-        <section className='section first-section'>
+
+
+    // let currentPage = e.target
+    // let setCurentPage
+    // const prevElement = e.target.previousElementSibling
+    // const nextElement = e.target.nextElementSibling
+
+    // console.dir(Object.values(pages))
+
+    // for (const key in pages) {
+    //   console.dir(pages[key].attributes[0].value);
+    // }
+
+
+    // if (delta < 0 && nextElement !== null) {
+    //   setCurentPage = nextElement.offsetTop
+    //   window.scrollTo({
+    //     top: setCurentPage,
+    //     behavior: "smooth"
+    //   })
+    // }
+
+    // if (delta > 0 && prevElement !== null) {
+    //   setCurentPage = prevElement.offsetTop
+    //   window.scrollTo({
+    //     top: setCurentPage,
+    //     behavior: "smooth"
+    //   })
+    // }
+
+    this.setState(() => {
+      return {
+        currentPage: setCurentPage
+      }
+    })
+
+  }
+
+  componentDidMount () {
+    const elements = document.getElementsByTagName('section')
+    const elementsObj = {}
+
+    for (const value of elements) {
+      elementsObj[value.classList[0]] = value
+    }
+
+    this.setState(() => {
+      return {
+        pages: elementsObj
+      }
+    })
+
+  }
+
+  render () {
+    const { pages, currentPage, pageHeight } = this.state
+
+    return (
+      <div className='app-container' onWheel={(e) => this.handleScroll(e)}>
+        <section className='firstSection section'>
           <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
           <Sidebar />
           <Title />
-          <SiteProgress pages={pages} curentPage={curentPage} pageHeight={pageHeight}/> 
+          <SiteProgress pages={pages} currentPage={currentPage} pageHeight={pageHeight} />
         </section>
-        <section className='section second-section'>
-              <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
+        <section className='secondSection section'>
+          <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
         </section>
-        </div>
-      )
-    }
+        <section className='secondSection section'>
+          <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
+        </section>
+        <section className='secondSection section'>
+          <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
+        </section>
+      </div>
+    )
+  }
 }
