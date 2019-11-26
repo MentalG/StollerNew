@@ -14,88 +14,87 @@ export default class App extends Component {
 
   state = {
     pages: {},
-    currentPage: 0,
+    currentOffSetTop: null,
     pageHeight: window.innerHeight
   }
 
-  handleScroll = (e) => {
-    const { currentPage, pageHeight } = this.state
-    const delta = e.nativeEvent.wheelDelta
-    let setCurentPage
+  isInViewport = (element) => {
+    const cordinate = element.getBoundingClientRect();
 
-    
-    if (delta < 0) {
-      setCurentPage = pageHeight + currentPage
-      window.scrollTo({
-        top: setCurentPage,
-        behavior: "smooth"
-      })
+    return (
+      cordinate.top >= 0 &&
+      cordinate.left >= 0 &&
+      cordinate.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      cordinate.right <= (window.innerWidth || document.documentElement.clientWidth)
+    )
+  }
+
+  setSections = () => {
+    const sectionElements = document.getElementsByTagName('section')
+    const sectionObj = {}
+
+    for (const value of sectionElements) {
+      const section = value.classList[0]
+
+      sectionObj[section] = {
+        isScroled: false,
+        isActive: this.isInViewport(value),
+        section: value
+      }
     }
-    
-    if (delta > 0) {
-      setCurentPage = currentPage - pageHeight
-      window.scrollTo({
-        top: setCurentPage,
-        behavior: "smooth"
-      })
-    }
-
-
-
-    // let currentPage = e.target
-    // let setCurentPage
-    // const prevElement = e.target.previousElementSibling
-    // const nextElement = e.target.nextElementSibling
-
-    // console.dir(Object.values(pages))
-
-    // for (const key in pages) {
-    //   console.dir(pages[key].attributes[0].value);
-    // }
-
-
-    // if (delta < 0 && nextElement !== null) {
-    //   setCurentPage = nextElement.offsetTop
-    //   window.scrollTo({
-    //     top: setCurentPage,
-    //     behavior: "smooth"
-    //   })
-    // }
-
-    // if (delta > 0 && prevElement !== null) {
-    //   setCurentPage = prevElement.offsetTop
-    //   window.scrollTo({
-    //     top: setCurentPage,
-    //     behavior: "smooth"
-    //   })
-    // }
 
     this.setState(() => {
       return {
-        currentPage: setCurentPage
+        pages: sectionObj
+      }
+    })
+  }
+
+  handleScroll = (e) => {
+    const { pages, currentOffSetTop, pageHeight } = this.state
+    const pagesArr = Object.values(pages)
+    const delta = e.nativeEvent.wheelDelta
+    const currentSection = pagesArr
+      .find(section => section.isActive === true)
+    const indexOfCurrentSection = pagesArr.indexOf(currentSection)
+    const prevSection = pagesArr[indexOfCurrentSection - 1]
+    const nextSection = pagesArr[indexOfCurrentSection + 1]
+
+    if (delta < 0 && nextSection !== undefined) {
+      window.scrollTo({
+        top: nextSection.section.offsetTop,
+        behavior: "auto"
+      })
+    }
+
+    if (delta > 0 && prevSection !== undefined) {
+      window.scrollTo({
+        top: prevSection.section.offsetTop,
+        behavior: "auto"
+      })
+    }
+
+    this.setState(({ pages }) => {
+      const setPages = Object.assign({}, pages)
+
+      for (const key in setPages) {
+        setPages[key].isActive = this.isInViewport(setPages[key].section)
+      }
+
+      return {
+        pages : setPages
       }
     })
 
   }
 
   componentDidMount () {
-    const elements = document.getElementsByTagName('section')
-    const elementsObj = {}
-
-    for (const value of elements) {
-      elementsObj[value.classList[0]] = value
-    }
-
-    this.setState(() => {
-      return {
-        pages: elementsObj
-      }
-    })
+    this.setSections()
 
   }
 
   render () {
-    const { pages, currentPage, pageHeight } = this.state
+    const { pages, currentOffSetTop, pageHeight } = this.state
 
     return (
       <div className='app-container' onWheel={(e) => this.handleScroll(e)}>
@@ -103,18 +102,22 @@ export default class App extends Component {
           <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
           <Sidebar />
           <Title />
-          <SiteProgress pages={pages} currentPage={currentPage} pageHeight={pageHeight} />
+          <SiteProgress pages={pages} currentOffSetTop={currentOffSetTop} pageHeight={pageHeight} />
         </section>
         <section className='secondSection section'>
           <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
+          <h1>SECTION 2</h1>
         </section>
-        <section className='secondSection section'>
+        <section className='thirdSection section'>
           <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
+          <h1>SECTION 3</h1>
         </section>
-        <section className='secondSection section'>
+        <section className='fourthSection section'>
           <video muted poster={poster} src={wallpaper} className="video-bg" alt="logo" autoPlay={true} loop={true} />
+          <h1>SECTION 4</h1>
         </section>
       </div>
     )
+
   }
 }
